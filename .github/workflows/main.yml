@@ -1,0 +1,29 @@
+
+name: Restful-Booker CI Pipeline
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  api-testing:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Newman
+        run: npm install -g newman
+
+      - name: Run Postman API Tests
+        run: |
+          newman run RestfulBooker_API_Collection_VHQ.postman_collection.json \
+            -e RestfulBooker_Env.postman_environment.json \
+            -d booking_data.csv
+  
